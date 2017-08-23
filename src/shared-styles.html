@@ -41,7 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				font-size:22px;
 			}
 
-			iron-form, paper-input{
+			iron-form, paper-input, paper-dialog{
 				max-width:400px;
 				margin:auto;
 			}
@@ -68,7 +68,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				background-color: var(--google-red-500);
 			}
 
+			.centered {
+				text-align: center;
+			}
 
+			iron-icon {
+				height: 64px;
+				width: 64px;
+				margin: auto 1em;
+
+			}
+			icon-play{
+				fill: orange;
+			}
+
+			iron-icon:nth-of-type(1) {
+				fill: orange;
+			}
+
+			iron-icon:nth-of-type(2) {
+				fill: green;
+			}
+
+			iron-icon:nth-of-type(3) {
+				fill: red;
+			}
+
+			iron-icon:nth-of-type(4) {
+				fill: red;
+			}
+
+			iron-icon {
+				transition: all 0.5s;
+				-webkit-transition: all 0.5s;
+			}
+
+			iron-icon:hover {
+				-webkit-filter: drop-shadow( 2px 2px 2px var(--google-grey-700) );
+				filter: drop-shadow( 2px 2px 2px var(--google-grey-700) );
+			}
 
 
 		</style>
