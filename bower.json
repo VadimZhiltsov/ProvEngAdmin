@@ -24,7 +24,9 @@
     "paper-input": "PolymerElements/paper-input#^2.0.1",
     "paper-checkbox": "PolymerElements/paper-checkbox#^2.0.1",
     "paper-date-picker": "bendavis78/paper-date-picker#^1.2.1",
-    "paper-dialog": "PolymerElements/paper-dialog#^2.0.0"
+    "paper-dialog": "PolymerElements/paper-dialog#^2.0.0",
+    "paper-datatable": "^0.9.8",
+    "google-signin": "^2.0.0"
   },
   "resolutions": {
     "polymer": "^2.0.0"

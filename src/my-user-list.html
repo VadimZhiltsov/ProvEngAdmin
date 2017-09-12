@@ -1,0 +1,72 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-datatable/paper-datatable-card.html">">
+<link rel="import" href="../bower_components/paper-datatable/paper-datatable.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-user-list">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+    </style>
+
+    <div class="card">
+				<paper-datatable data="{{data}}" selectable multi-selection>
+					<paper-datatable-column header="Dessert (100g serving)" property="title" type="String" style="width:99%;" sortable></paper-datatable-column>
+					<paper-datatable-column header="Calories" property="calories" type="Number" align="right" sortable tooltip="The total amount of food energy in the given serving size." sorted></paper-datatable-column>
+					<paper-datatable-column header="Fat (g)" property="fat" type="Number" align="right" format-value="[[toFixedOne]]" sortable tooltip="The total amount of fat in the given serving size."></paper-datatable-column>
+					<paper-datatable-column header="Carbs (g)" property="carbs" type="Number" align="right" sortable tooltip="The total amount of carbs in the given serving size."></paper-datatable-column>
+					<paper-datatable-column header="Protein (g)" property="protein" type="Number" align="right" format-value="[[toFixedOne]]" sortable tooltip="The total amount of protein in the given serving size."></paper-datatable-column>
+					<paper-datatable-column header="Sodium (mg)" property="sodium" type="Number" align="right" sortable tooltip="The amount of sodium as a percentage of the recommended daily amount."></paper-datatable-column>
+					<paper-datatable-column header="Calcium (%)" property="calcium" type="Number" align="right" format-value="[[toPercentage]]" sortable tooltip="The amount of calcium as a percentage of the recommended daily amount."></paper-datatable-column>
+					<paper-datatable-column header="Iron (%)" property="iron" type="Number" align="right" format-value="[[toPercentage]]" sortable tooltip="The amount of iron as a percentage of the recommended daily amount."></paper-datatable-column>
+				</paper-datatable>
+    </div>
+  </template>
+
+  <script>
+    class MyUserList extends Polymer.Element {
+      static get is() { return 'my-user-list'; }
+
+      static get properties() {
+        return {
+          data: {
+            type: Array,
+            value: [
+      				{id: 0, title: 'Frozen yogurt', calories: 159, fat: 6, carbs: 24, protein: 4, sodium: 87, calcium:.14, iron: .01},
+      				{id: 1, title: 'Ice cream sandwich', calories: 237, fat: 9, carbs: 37, protein: 4.3, sodium: 129, calcium:.08, iron: .01},
+      				{id: 2, title: 'Eclair', calories: 262, fat: 16, carbs: 24, protein: 6, sodium: 337, calcium:.06, iron: .07},
+      				{id: 3, title: 'Cupcake', calories: 305, fat: 3.7, carbs: 67, protein: 4.3, sodium: 413, calcium:.03, iron: .08},
+      				{id: 4, title: 'Gingerbread', calories: 356, fat: 16, carbs: 49, protein: 3.9, sodium: 327, calcium:.07, iron: .16},
+      				{id: 5, title: 'Jelly bean', calories: 373, fat: 0, carbs: 94, protein: 0, sodium: 50, calcium:0, iron: 0}
+      			],
+          }
+        }
+      }
+
+      toFixedOne(value) {
+				return value.toFixed(1);
+			}
+
+      toPercentage(value){
+				return Math.round(value * 10000)/100 + '%';
+			}
+
+    }
+
+    window.customElements.define(MyUserList.is, MyUserList);
+  </script>
+</dom-module>
