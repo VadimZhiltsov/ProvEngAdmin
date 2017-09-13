@@ -26,7 +26,8 @@
     "paper-date-picker": "bendavis78/paper-date-picker#^1.2.1",
     "paper-dialog": "PolymerElements/paper-dialog#^2.0.0",
     "paper-datatable": "^0.9.8",
-    "google-signin": "^2.0.0"
+    "google-signin": "^2.0.0",
+    "paper-datatable-api": "^2.0.7"
   },
   "resolutions": {
     "polymer": "^2.0.0"

@@ -9,8 +9,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../bower_components/paper-datatable/paper-datatable-card.html">">
-<link rel="import" href="../bower_components/paper-datatable/paper-datatable.html">
+<link rel="import" href="../bower_components/paper-datatable-api/paper-datatable-api-column.html">
+<link rel="import" href="../bower_components/paper-datatable-api/paper-datatable-api.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-user-list">
@@ -24,16 +24,40 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <div class="card">
-				<paper-datatable data="{{data}}" selectable multi-selection>
-					<paper-datatable-column header="Dessert (100g serving)" property="title" type="String" style="width:99%;" sortable></paper-datatable-column>
-					<paper-datatable-column header="Calories" property="calories" type="Number" align="right" sortable tooltip="The total amount of food energy in the given serving size." sorted></paper-datatable-column>
-					<paper-datatable-column header="Fat (g)" property="fat" type="Number" align="right" format-value="[[toFixedOne]]" sortable tooltip="The total amount of fat in the given serving size."></paper-datatable-column>
-					<paper-datatable-column header="Carbs (g)" property="carbs" type="Number" align="right" sortable tooltip="The total amount of carbs in the given serving size."></paper-datatable-column>
-					<paper-datatable-column header="Protein (g)" property="protein" type="Number" align="right" format-value="[[toFixedOne]]" sortable tooltip="The total amount of protein in the given serving size."></paper-datatable-column>
-					<paper-datatable-column header="Sodium (mg)" property="sodium" type="Number" align="right" sortable tooltip="The amount of sodium as a percentage of the recommended daily amount."></paper-datatable-column>
-					<paper-datatable-column header="Calcium (%)" property="calcium" type="Number" align="right" format-value="[[toPercentage]]" sortable tooltip="The amount of calcium as a percentage of the recommended daily amount."></paper-datatable-column>
-					<paper-datatable-column header="Iron (%)" property="iron" type="Number" align="right" format-value="[[toPercentage]]" sortable tooltip="The amount of iron as a percentage of the recommended daily amount."></paper-datatable-column>
-				</paper-datatable>
+      <paper-datatable-api
+        paginate
+        selectable
+        filters
+        page="{{page}}"
+        size="{{size}}"
+        available-size="[2, 4]"
+        toggle-columns="{{toggleColumns}}"
+        on-sort="_handleSort"
+        on-filter="_handleFilter"
+        selected-rows={{selectedRows}}
+        on-selection-changed="_handleSelectionChanged"
+        total-elements="[[totalElements]]"
+        total-pages="[[totalPages]]"
+
+        data="[[data]]">
+        <paper-datatable-api-column
+          header="title" property="title"
+          filter
+          choices='[{"key": "banana","label": "banana"},{"key": "apple","label": "apple"},{"key": "orange","label": "orange"},{"key":"strawberry","label": "strawberry"}]'
+          sortable
+          draggable-column
+          hideable>
+
+          <template>
+            <span>{{value}}</span>
+          </template>
+        </paper-datatable-api-column>
+        <paper-datatable-api-column header="calories" property="calories" draggable-column filter>
+          <template>
+            <span>{{value}}</span>
+          </template>
+        </paper-datatable-api-column>
+      </paper-datatable-api>
     </div>
   </template>
 
@@ -56,15 +80,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         }
       }
-
-      toFixedOne(value) {
-				return value.toFixed(1);
-			}
-
-      toPercentage(value){
-				return Math.round(value * 10000)/100 + '%';
-			}
-
     }
 
     window.customElements.define(MyUserList.is, MyUserList);
