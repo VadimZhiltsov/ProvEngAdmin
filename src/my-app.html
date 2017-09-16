@@ -21,6 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-icon">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/google-signin/google-signin.html">
 <link rel="import" href="../bower_components/google-signin/google-signin-aware.html">
@@ -74,14 +75,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     </style>
 
-    <template is="dom-if" if="{{!isAuthorized}}" restamp>
+    <template  is="dom-if" if="{{!isAuthorized}}" restamp>
       <google-signin
         client-id="352789647391-vq04b3va9ht4ie1ggig3r4crlfn8946r.apps.googleusercontent.com"
         brand="google" width="wide"
         is-authorized="{{isAuthorized}}"
 
       ></google-signin>
+
+      <google-signin-aware
+        scopes="https://www.googleapis.com/auth/drive"
+        offline
+        on-google-signin-aware-success="_handleSignin"></google-signin-aware>
+
     </template>
+
+
+
+
     <paper-icon-button class="red" icon="custom-icons:android" on-tap="_signIn">Sign In</paper-icon-button>
     <template is="dom-if" if="{{isAuthorized}}" restamp>
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
@@ -121,7 +132,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <my-view3 name="view3"></my-view3>
             <my-view404 name="view404"></my-view404>
             <my-form name="form"></my-form>
-
           </iron-pages>
         </app-header-layout>
       </app-drawer-layout>
@@ -129,6 +139,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
+
     class MyApp extends Polymer.Element {
       static get is() { return 'my-app'; }
 
@@ -187,7 +198,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       _signIn() {
         this.$.aware.signIn();
+
       }
+
+	    _handleSignin(response) {
+      	debugger
+		    var user = gapi.auth2.getAuthInstance()['currentUser'].get();
+		    console.log('User name: ' + user.getBasicProfile().getName());
+	    };
     }
 
     window.customElements.define(MyApp.is, MyApp);
