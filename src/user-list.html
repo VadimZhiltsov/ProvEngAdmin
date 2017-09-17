@@ -1,0 +1,86 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-datatable-api/paper-datatable-api-column.html">
+<link rel="import" href="../bower_components/paper-datatable-api/paper-datatable-api.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="user-list">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+    </style>
+
+    <div class="card">
+      <paper-datatable-api
+        paginate
+        selectable
+        filters
+        page="{{page}}"
+        size="{{size}}"
+        available-size="[2, 4]"
+        toggle-columns="{{toggleColumns}}"
+        on-sort="_handleSort"
+        on-filter="_handleFilter"
+        selected-rows={{selectedRows}}
+        on-selection-changed="_handleSelectionChanged"
+        total-elements="[[totalElements]]"
+        total-pages="[[totalPages]]"
+
+        data="[[data]]">
+        <paper-datatable-api-column
+          header="title" property="title"
+          filter
+          choices='[{"key": "banana","label": "banana"},{"key": "apple","label": "apple"},{"key": "orange","label": "orange"},{"key":"strawberry","label": "strawberry"}]'
+          sortable
+          draggable-column
+          hideable>
+
+          <template>
+            <span>{{value}}</span>
+          </template>
+        </paper-datatable-api-column>
+        <paper-datatable-api-column header="calories" property="calories" draggable-column filter>
+          <template>
+            <span>{{value}}</span>
+          </template>
+        </paper-datatable-api-column>
+      </paper-datatable-api>
+    </div>
+  </template>
+
+  <script>
+    class MyUserList extends Polymer.Element {
+      static get is() { return 'user-list'; }
+
+      static get properties() {
+        return {
+          data: {
+            type: Array,
+            value: [
+      				{id: 0, title: 'Frozen yogurt', calories: 159, fat: 6, carbs: 24, protein: 4, sodium: 87, calcium:.14, iron: .01},
+      				{id: 1, title: 'Ice cream sandwich', calories: 237, fat: 9, carbs: 37, protein: 4.3, sodium: 129, calcium:.08, iron: .01},
+      				{id: 2, title: 'Eclair', calories: 262, fat: 16, carbs: 24, protein: 6, sodium: 337, calcium:.06, iron: .07},
+      				{id: 3, title: 'Cupcake', calories: 305, fat: 3.7, carbs: 67, protein: 4.3, sodium: 413, calcium:.03, iron: .08},
+      				{id: 4, title: 'Gingerbread', calories: 356, fat: 16, carbs: 49, protein: 3.9, sodium: 327, calcium:.07, iron: .16},
+      				{id: 5, title: 'Jelly bean', calories: 373, fat: 0, carbs: 94, protein: 0, sodium: 50, calcium:0, iron: 0}
+      			],
+          }
+        }
+      }
+    }
+
+    window.customElements.define(MyUserList.is, MyUserList);
+  </script>
+</dom-module>
