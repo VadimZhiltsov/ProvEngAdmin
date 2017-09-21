@@ -19,6 +19,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/google-signin/google-signin.html">
 <link rel="import" href="../bower_components/google-signin/google-signin-aware.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+
+
 <!--my imports-->
 
 <link rel="import" href="shared-styles.html">
@@ -39,7 +41,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
     </style>
-
     <div class="card">
       <div class="circle">1</div>
       <h1>View One</h1>
@@ -47,17 +48,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
       <iron-icon icon="av:new-releases"></iron-icon>
       <iron-icon icon="my-icons:arrow-back"></iron-icon>
-
     </div>
+
+
+      <div>Hellow {{who}}</div>
 
   </template>
 
   <script>
-    class MyView1 extends Polymer.Element {
+    class TestPage extends Polymer.Element {
       static get is() { return 'test-page'; }
+      static get properties() {
+      	return{
+      		who: {
+      			type:String,
+            notify: false,
+
+          }
+        }
+      }
+
     }
 
-
-    window.customElements.define(MyView1.is, MyView1);
+    window.customElements.define(TestPage.is, TestPage);
   </script>
 </dom-module>

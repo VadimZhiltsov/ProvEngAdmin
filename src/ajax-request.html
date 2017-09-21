@@ -1,0 +1,104 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<!--my imports-->
+
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<!--my imports-->
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="ajax-request">
+	<template>
+
+		<style include="shared-styles">
+			:host{
+				display:block;
+				padding:10px;
+			}
+
+			iron-icon{
+				height:50px;
+				width:50px;
+				transition:all 0.2s;
+				-webkit-transition:all 0.2s;
+			}
+
+		</style>
+		<pre>User: [[response]]</pre>
+		<iron-ajax
+			auto
+			method="post"
+			url="[[apiEndPoint]]/rest/v1/auth-by-google"
+			headers="{{requestHeaders}}"
+			body="{{requestBody}}"
+			handle-as="json"
+			content-type="application/json"
+			on-response="handleResponse"
+			debounce-duration="300">
+		</iron-ajax>
+
+		<!--params='{"gToken":"ya29.GlzNBG-RzQKf6VMQMen0H4HIXzcyhK-wT1r-cS0vmfpk8xCAhc0UOOlaChbByLq0cL6C-hswGZA5lKCZnk7FkrVrL34kSPmY--epAVRCyYhvYKg5bMJMWPEWx1aYOQ}'-->
+
+
+	</template>
+
+	<script>
+	  class AjaxRequest extends Polymer.Element {
+		  static get is() {
+			  return 'ajax-request';
+		  }
+
+		  static get properties() {
+			  return {
+				  apiEndPoint: {
+					  type: String,
+					  value: 'http://proveng.cloud.provectus-it.com'
+				  },
+				  response: {
+					  type: String,
+				  },
+				  requestBody: {
+					  type: String,
+					  computed: '_createRequestBody(response)',
+					  notify: true
+				  },
+				  requestHeaders: {
+					  type: String,
+					  computed: '_createRequestHeaders(response)',
+					  notify: true
+				  },
+			  };
+		  }
+
+		  _createRequestBody(response) {
+			  let body = {
+				  gToken: "ya29.GlzNBG-RzQKf6VMQMen0H4HIXzcyhK-wT1r-cS0vmfpk8xCAhc0UOOlaChbByLq0cL6C-hswGZA5lKCZnk7FkrVrL34kSPmY--epAVRCyYhvYKg5bMJMWPEWx1aYOQ",
+			  }
+			  console.log(JSON.stringify(body));
+			  return JSON.stringify(body);
+		  }
+
+		  _createRequestHeaders(response) {
+			  let headers = {
+				  "content-type": "application/json",
+			  }
+			  return JSON.stringify(headers);
+		  }
+
+		  handleResponse(data) {
+			  console.log('получил ответ');
+		  }
+	  }
+
+	  window.customElements.define(AjaxRequest.is, AjaxRequest);
+	</script>
+</dom-module>

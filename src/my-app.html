@@ -25,7 +25,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <!--my imports-->
 <!--<link rel="import" href="../bower_components/iron-form/iron-form.html">-->
-<!--<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">-->
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/google-signin/google-signin.html">
 <link rel="import" href="../bower_components/google-signin/google-signin-aware.html">
 <!--<link rel="import" href="../bower_components/iron-iconset-svg/iron-iconset-svg.html">-->
@@ -35,7 +35,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="my-icons.html">
 <link rel="lazy-import" href="user-list.html">
 <link rel="lazy-import" href="test-page.html">
-<!--<link rel="lazy-import" href="my-view2.html">-->
+<link rel="lazy-import" href="ajax-request.html">
 <!--<link rel="lazy-import" href="my-view3.html">-->
 <link rel="lazy-import" href="view-404.html">
 <!--<link rel="import" href="my-icons.html">-->
@@ -112,6 +112,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 						<a name="user-list" href="[[rootPath]]user-list">User List</a>
 						<a name="test-page" href="[[rootPath]]test-page">Test page</a>
+						<a name="ajax-request" href="[[rootPath]]ajax-request">ajax-request</a>
 						<!--<a name="view2" href="[[rootPath]]view2">View Two</a>-->
 						<!--<a name="view3" href="[[rootPath]]view3">View Three</a>-->
 						<!--<a name="form" href="[[rootPath]]form">Form</a>-->
@@ -132,11 +133,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 						fallback-selection="view-404"
 						role="main">
 						<user-list name="user-list"></user-list>
-						<test-page name="test-page"></test-page>
-						<!--<my-view2 name="view2"></my-view2>-->
-						<!--<my-view3 name="view3"></my-view3>-->
+						<test-page name="test-page" who="{{name}}"></test-page>
+						<ajax-request name="ajax-request" response="[[accessToken]]"></ajax-request>
 						<view-404 name="view-404"></view-404>
-						<!--<my-form name="form"></my-form>-->
 					</iron-pages>
 				</app-header-layout>
 			</app-drawer-layout>
@@ -166,15 +165,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				  // This shouldn't be neccessary, but the Analyzer isn't picking up
 				  // Polymer.Element#rootPath
 				  rootPath: String,
-			  };
+			  }
+
+
+
 		  }
 
-//
 		  static get observers() {
 			  return [
 				  '_routePageChanged(routeData.page)',
 			  ];
 		  }
+	    constructor(){
+		    super();
+		    this.name = 'Roma';
+		    this.accessToken;
+
+	    }
 
 		  _routePageChanged(page) {
 
@@ -207,10 +214,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		  }
 
 		  _handleSignin(response) {
-			  var user = gapi.auth2.getAuthInstance()['currentUser'].get();
-			  console.log(response);
-			  console.log('User name: ' + user.getBasicProfile().getName());
+		  	//получаем  данные пользователя залогиненногочерез гугл
+				// Если авторизация успешна получаем токен от google
+			  this.user = gapi.auth2.getAuthInstance()['currentUser'].get();
+		    this.accessToken = response.detail.id_token;
+		    console.log(this.user);
+		    console.log('User name: ' + this.user.getBasicProfile().getName());
 		  }
+
 	  }
 
 	  window.customElements.define(MyApp.is, MyApp);
