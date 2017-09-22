@@ -217,11 +217,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		  	//получаем  данные пользователя залогиненногочерез гугл
 				// Если авторизация успешна получаем токен от google
 			  this.user = gapi.auth2.getAuthInstance()['currentUser'].get();
-		    this.accessToken = response.detail.id_token;
+		    this.accessToken = response.detail.access_token;
 		    console.log(this.user);
 		    console.log('User name: ' + this.user.getBasicProfile().getName());
 		  }
-
 	  }
 
 	  window.customElements.define(MyApp.is, MyApp);

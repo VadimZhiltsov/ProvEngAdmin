@@ -34,20 +34,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 		</style>
 		<pre>User: [[response]]</pre>
+		<pre>User: [[headers]]</pre>
+		<button on-click="sendXMLHttpRequest">sendXMLHttpRequest</button>
 		<iron-ajax
 			auto
 			method="post"
 			url="[[apiEndPoint]]/rest/v1/auth-by-google"
-			headers="{{requestHeaders}}"
+			headers="{{headers}}"
 			body="{{requestBody}}"
 			handle-as="json"
-			content-type="application/json"
 			on-response="handleResponse"
 			debounce-duration="300">
 		</iron-ajax>
-
-		<!--params='{"gToken":"ya29.GlzNBG-RzQKf6VMQMen0H4HIXzcyhK-wT1r-cS0vmfpk8xCAhc0UOOlaChbByLq0cL6C-hswGZA5lKCZnk7FkrVrL34kSPmY--epAVRCyYhvYKg5bMJMWPEWx1aYOQ}'-->
-
+		<!--params='{{requestBody}}'-->
+		<!--content-type="application/json"-->
 
 	</template>
 
@@ -63,6 +63,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					  type: String,
 					  value: 'http://proveng.cloud.provectus-it.com'
 				  },
+				  headers: {
+					  type: Object,
+					  computed: '_getHeaders(customHeader)'
+				  },
+				  customHeader: {
+					  value: 'application/json'
+				  },
 				  response: {
 					  type: String,
 				  },
@@ -71,32 +78,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 					  computed: '_createRequestBody(response)',
 					  notify: true
 				  },
-				  requestHeaders: {
-					  type: String,
-					  computed: '_createRequestHeaders(response)',
-					  notify: true
-				  },
 			  };
 		  }
 
-		  _createRequestBody(response) {
-			  let body = {
-				  gToken: "ya29.GlzNBG-RzQKf6VMQMen0H4HIXzcyhK-wT1r-cS0vmfpk8xCAhc0UOOlaChbByLq0cL6C-hswGZA5lKCZnk7FkrVrL34kSPmY--epAVRCyYhvYKg5bMJMWPEWx1aYOQ",
-			  }
-			  console.log(JSON.stringify(body));
-			  return JSON.stringify(body);
+		  _getHeaders(customHeader) {
+		    let header = {"content-type": customHeader}
+		  console.log(JSON.stringify(header));
+		  return JSON.stringify(header)
+
 		  }
 
-		  _createRequestHeaders(response) {
-			  let headers = {
-				  "content-type": "application/json",
-			  }
-			  return JSON.stringify(headers);
+		  _createRequestBody(response) {
+			  let body = { gToken: response }
+			  return JSON.stringify(body)
+		  }
+
+		  sendXMLHttpRequest() {
+			  // ajax call
+//			  console.log("Headers in AJAX: " + this.$.ajax.headers);
+			  //this.$.ajax.body = this.headersProperty;
+//			  this.$.ajax.generateRequest();
 		  }
 
 		  handleResponse(data) {
 			  console.log('получил ответ');
 		  }
+
 	  }
 
 	  window.customElements.define(AjaxRequest.is, AjaxRequest);
