@@ -1,7 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
-<dom-module id="user-data-service">
+<dom-module id="user-data-provider">
   <template>
     <iron-ajax
       auto
@@ -14,9 +14,9 @@
     </iron-ajax>
   </template>
   <script>
-    class UserDataService extends Polymer.Element {
+    class UserDataProvider extends Polymer.Element {
       static get is() {
-        return 'user-data-service';
+        return 'user-data-provider';
       }
       static get properties() {
         return {
@@ -39,17 +39,13 @@
         }
       }
       _handleResponse(event) {
-        let response = event.detail.response;
-        this.data = JSON.parse(response.result);
-        console.log(this.data);
+        this.data = event.detail.response.result;
       }
 
       _getHeaders(customHeader) {
-        let header = {"token": customHeader};
-        console.log(JSON.stringify(header));
-        return JSON.stringify(header);
+        return {token: customHeader};
       }
     }
-    window.customElements.define(UserDataService.is, UserDataService);
+    window.customElements.define(UserDataProvider.is, UserDataProvider);
   </script>
 </dom-module>
