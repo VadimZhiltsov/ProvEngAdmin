@@ -1,0 +1,41 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="user-data-service">
+  <template>
+    <iron-ajax
+      auto
+      method="get"
+      url="[[apiEndPoint]]/rest/mock/users"
+      headers="ya29.GlvVBEgVB6Mz9GfrBuGyhJWw1jqPW4wplhRL1b21mBRWySG_XYdavOj3Jb1WUYrHBswmsHY1j95fMHbBhxdoam_88ZxMWGppp4_y9tyMsa8coiVCR4AYIqlJ8-qh"
+      handle-as="json"
+      content-type="application/json"
+      on-response="_handleResponse">
+    </iron-ajax>
+  </template>
+  <script>
+    class UserDataService extends Polymer.Element {
+      static get is() {
+        return 'user-data-service';
+      }
+      static get properties() {
+        return {
+          apiEndPoint: {
+            type: String,
+            value: 'http://proveng.cloud.provectus-it.com'
+          },
+          data: {
+            type: Array,
+            notify: true
+          }
+        }
+      }
+      _handleResponse(event) {
+        var response = event.detail.response;
+        this.data = JSON.parse(response.result);
+        console.log(this.data);
+      }
+    }
+    window.customElements.define(UserDataService.is, UserDataService);
+  </script>
+</dom-module>

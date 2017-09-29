@@ -11,7 +11,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/paper-datatable-api/paper-datatable-api-column.html">
 <link rel="import" href="../bower_components/paper-datatable-api/paper-datatable-api.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="shared-styles.html">
+
+<link rel="import" href="user-data-service.html">
 
 <dom-module id="user-list">
   <template>
@@ -22,30 +25,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <div class="card">
-      <paper-datatable-api
-        paginate
-        selectable
-        filters
-        page="{{page}}"
-        size="{{size}}"
-        available-size="[2, 4]"
-        toggle-columns="{{toggleColumns}}"
-        on-sort="_handleSort"
-        on-filter="_handleFilter"
-        selected-rows={{selectedRows}}
-        on-selection-changed="_handleSelectionChanged"
-        total-elements="[[totalElements]]"
-        total-pages="[[totalPages]]"
+    <user-data-service></user-data-service>
 
-        data="[[data]]">
+    <paper-card heading="Users list">
+    <div class="card-content">
+      <paper-datatable-api
+          paginate
+          selectable
+          filters
+          page="{{page}}"
+          size="{{size}}"
+          available-size="[2, 4]"
+          toggle-columns="{{toggleColumns}}"
+          on-sort="_handleSort"
+          on-filter="_handleFilter"
+          selected-rows={{selectedRows}}
+          on-selection-changed="_handleSelectionChanged"
+          total-elements="[[totalElements]]"
+          total-pages="[[totalPages]]"
+
+          data="[[data]]">
         <paper-datatable-api-column
-          header="title" property="title"
-          filter
-          choices='[{"key": "banana","label": "banana"},{"key": "apple","label": "apple"},{"key": "orange","label": "orange"},{"key":"strawberry","label": "strawberry"}]'
-          sortable
-          draggable-column
-          hideable>
+            header="title" property="title"
+            filter
+            choices='[{"key": "banana","label": "banana"},{"key": "apple","label": "apple"},{"key": "orange","label": "orange"},{"key":"strawberry","label": "strawberry"}]'
+            sortable
+            draggable-column
+            hideable>
           <template>
             <span>{{value}}</span>
           </template>
@@ -55,28 +61,122 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <span>{{value}}</span>
           </template>
         </paper-datatable-api-column>
+        <paper-datatable-api-column header="fat" property="fat" draggable-column filter>
+          <template>
+            <span>{{value}}</span>
+          </template>
+        </paper-datatable-api-column>
+        <paper-datatable-api-column header="carbs" property="carbs" draggable-column filter>
+          <template>
+            <span>{{value}}</span>
+          </template>
+        </paper-datatable-api-column>
       </paper-datatable-api>
     </div>
+    </paper-card>
+    <paper-card id="paperCardEvent" heading="Events">
+      <div class="card-content"></div>
+    </paper-card>
   </template>
 
   <script>
+    /* eslint-disable linebreak-style,space-before-function-paren,max-len,comma-dangle,semi,linebreak-style,linebreak-style,no-trailing-spaces */
+
     class MyUserList extends Polymer.Element {
-      static get is() { return 'user-list'; }
+      static get is() {
+        return 'user-list';
+      }
 
       static get properties() {
         return {
+          sortProperty: {
+            type: String,
+          },
           data: {
             type: Array,
             value: [
-      				{id: 0, title: 'Frozen yogurt', calories: 159, fat: 6, carbs: 24, protein: 4, sodium: 87, calcium:.14, iron: .01},
-      				{id: 1, title: 'Ice cream sandwich', calories: 237, fat: 9, carbs: 37, protein: 4.3, sodium: 129, calcium:.08, iron: .01},
-      				{id: 2, title: 'Eclair', calories: 262, fat: 16, carbs: 24, protein: 6, sodium: 337, calcium:.06, iron: .07},
-      				{id: 3, title: 'Cupcake', calories: 305, fat: 3.7, carbs: 67, protein: 4.3, sodium: 413, calcium:.03, iron: .08},
-      				{id: 4, title: 'Gingerbread', calories: 356, fat: 16, carbs: 49, protein: 3.9, sodium: 327, calcium:.07, iron: .16},
-      				{id: 5, title: 'Jelly bean', calories: 373, fat: 0, carbs: 94, protein: 0, sodium: 50, calcium:0, iron: 0}
-      			],
+              {
+                id: 0,
+                title: 'Frozen yogurt',
+                calories: 159,
+                fat: 6,
+                carbs: 24,
+                protein: 4,
+                sodium: 87,
+                calcium: .14,
+                iron: .01
+              },
+              {
+                id: 1,
+                title: 'Ice cream sandwich',
+                calories: 237,
+                fat: 9,
+                carbs: 37,
+                protein: 4.3,
+                sodium: 129,
+                calcium: .08,
+                iron: .01
+              },
+              {
+                id: 2,
+                title: 'Eclair',
+                calories: 262,
+                fat: 16,
+                carbs: 24,
+                protein: 6,
+                sodium: 337,
+                calcium: .06,
+                iron: .07
+              },
+              {
+                id: 3,
+                title: 'Cupcake',
+                calories: 305,
+                fat: 3.7,
+                carbs: 67,
+                protein: 4.3,
+                sodium: 413,
+                calcium: .03,
+                iron: .08
+              },
+              {
+                id: 4,
+                title: 'Gingerbread',
+                calories: 356,
+                fat: 16,
+                carbs: 49,
+                protein: 3.9,
+                sodium: 327,
+                calcium: .07,
+                iron: .16
+              },
+              {
+                id: 5,
+                title: 'Jelly bean',
+                calories: 373,
+                fat: 0,
+                carbs: 94,
+                protein: 0,
+                sodium: 50,
+                calcium: 0,
+                iron: 0
+              }
+            ]
           }
         }
+      }
+
+      _handleSort (event) {
+        this.sortProperty = event.detail.sort.property + ',' + event.detail.sort.direction;
+      }
+
+      _handleFilter (event) {
+        var divLocal = document.createElement('div');
+        var filter = event.detail.filter.value;
+        var column = event.detail.filter.property;
+        var eventRow = document.createTextNode(filter + ' is filtered on ' + column + ' column');
+        Polymer.dom(divLocal).appendChild(eventRow);
+        Polymer.dom(this.$.paperCardEvent).querySelector('.card-content').appendChild(divLocal);
       }
     }
 
