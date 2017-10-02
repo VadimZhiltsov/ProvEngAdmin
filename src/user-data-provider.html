@@ -1,7 +1,9 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-meta/iron-meta.html">
 
 <dom-module id="user-data-provider">
+
   <template>
     <iron-ajax
       auto
@@ -24,13 +26,9 @@
             type: String,
             value: 'http://proveng.cloud.provectus-it.com'
           },
-          customHeader: {
-            type: String,
-            value: "ya29.GlvVBEgVB6Mz9GfrBuGyhJWw1jqPW4wplhRL1b21mBRWySG_XYdavOj3Jb1WUYrHBswmsHY1j95fMHbBhxdoam_88ZxMWGppp4_y9tyMsa8coiVCR4AYIqlJ8-qh"
-          },
           headers: {
             type: String,
-            computed: '_getHeaders(customHeader)'
+            computed: '_getHeaders()'
           },
           data: {
             type: Array,
@@ -40,9 +38,11 @@
       }
       _handleResponse(event) {
         this.data = event.detail.response.result;
+        console.log(this.data[0].firstName + " " + this.data[0].lastName);
       }
 
-      _getHeaders(customHeader) {
+      _getHeaders() {
+        let customHeader = new Polymer.IronMeta({key: 'localToken'}).value;
         return {token: customHeader};
       }
     }

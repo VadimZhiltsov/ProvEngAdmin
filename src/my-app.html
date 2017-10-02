@@ -21,6 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-meta/iron-meta.html">
 
 
 <!--my imports-->
@@ -41,188 +42,188 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <!--<link rel="import" href="my-icons.html">-->
 
 <dom-module id="my-app">
-	<template>
-		<style>
-			:host{
-				--app-primary-color:#4285F4;
-				--app-secondary-color:black;
-				display:block;
-			}
+  <template>
+    <style>
+      :host {
+        --app-primary-color: #4285F4;
+        --app-secondary-color: black;
+        display: block;
+      }
 
-			app-drawer-layout:not([narrow]) [drawer-toggle]{
-				display:none;
-			}
+      app-drawer-layout:not([narrow]) [drawer-toggle] {
+        display: none;
+      }
 
-			app-header{
-				color:#FFF;
-				background-color:var(--app-primary-color);
-			}
+      app-header {
+        color: #FFF;
+        background-color: var(--app-primary-color);
+      }
 
-			app-header paper-icon-button{
-				--paper-icon-button-ink-color:white;
-			}
+      app-header paper-icon-button {
+        --paper-icon-button-ink-color: white;
+      }
 
-			.drawer-list{
-				margin:0 20px;
-			}
+      .drawer-list {
+        margin: 0 20px;
+      }
 
-			.drawer-list a{
-				display:block;
-				padding:0 16px;
-				text-decoration:none;
-				color:var(--app-secondary-color);
-				line-height:40px;
-			}
+      .drawer-list a {
+        display: block;
+        padding: 0 16px;
+        text-decoration: none;
+        color: var(--app-secondary-color);
+        line-height: 40px;
+      }
 
-			.drawer-list a.iron-selected{
-				color:black;
-				font-weight:bold;
-			}
-		</style>
-		<template is="dom-if" if="{{!isAuthorized}}" restamp>
-			<google-signin
-				client-id="352789647391-vq04b3va9ht4ie1ggig3r4crlfn8946r.apps.googleusercontent.com"
-				brand="google" width="wide"
-				is-authorized="{{isAuthorized}}"
-				hosted-domain=""
-			></google-signin>
-			<google-signin-aware
-				scopes="https://www.googleapis.com/auth/drive"
-				offline
-				on-google-signin-aware-success="_handleSignin"
-			></google-signin-aware>
-		</template>
+      .drawer-list a.iron-selected {
+        color: black;
+        font-weight: bold;
+      }
+    </style>
 
+    <iron-meta id="meta" key="localToken" value=[[accessToken]]></iron-meta>
 
-		<!--<paper-icon-button class="red" icon="custom-icons:android" on-tap="_signIn">Sign In</paper-icon-button>-->
-		<!--<iron-icon icon="my-icons:android"></iron-icon>-->
-		<template is="dom-if" if="{{isAuthorized}}" restamp>
-			<app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
-			<app-route
-				route="{{route}}"
-				pattern="[[rootPath]]:page"
-				data="{{routeData}}"
-				tail="{{subroute}}"></app-route>
-			<app-drawer-layout fullbleed narrow="{{narrow}}">
-				<!-- Drawer content -->
-				<app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
-					<app-toolbar>Menu</app-toolbar>
-
-					<iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-
-						<a name="user-list" href="[[rootPath]]user-list">User List</a>
-						<a name="test-page" href="[[rootPath]]test-page">Test page</a>
-						<a name="ajax-request" href="[[rootPath]]ajax-request">ajax-request</a>
-						<!--<a name="view2" href="[[rootPath]]view2">View Two</a>-->
-						<!--<a name="view3" href="[[rootPath]]view3">View Three</a>-->
-						<!--<a name="form" href="[[rootPath]]form">Form</a>-->
-					</iron-selector>
-				</app-drawer>
-				<!-- Main content -->
-				<app-header-layout has-scrolling-region>
-					<app-header slot="header" condenses reveals effects="waterfall">
-						<app-toolbar>
-							<paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
-							<div main-title>My App</div>
-							<google-signin ></google-signin>
-						</app-toolbar>
-					</app-header>
-					<iron-pages
-						selected="[[page]]"
-						attr-for-selected="name"
-						fallback-selection="view-404"
-						role="main">
-						<user-list name="user-list"></user-list>
-						<test-page name="test-page" who="{{name}}"></test-page>
-						<ajax-request name="ajax-request" response="[[accessToken]]"></ajax-request>
-						<view-404 name="view-404"></view-404>
-					</iron-pages>
-				</app-header-layout>
-			</app-drawer-layout>
-		</template>
-	</template>
-	<script>
+    <template is="dom-if" if="{{!isAuthorized}}" restamp>
+      <google-signin
+          client-id="352789647391-vq04b3va9ht4ie1ggig3r4crlfn8946r.apps.googleusercontent.com"
+          brand="google" width="wide"
+          is-authorized="{{isAuthorized}}"
+          hosted-domain=""
+      ></google-signin>
+      <google-signin-aware
+          scopes="https://www.googleapis.com/auth/drive"
+          offline
+          on-google-signin-aware-success="_handleSignin"
+      ></google-signin-aware>
+    </template>
 
 
-	  class MyApp extends Polymer.Element {
-		  static get is() {
-			  return 'my-app';
-		  }
+    <!--<paper-icon-button class="red" icon="custom-icons:android" on-tap="_signIn">Sign In</paper-icon-button>-->
+    <!--<iron-icon icon="my-icons:android"></iron-icon>-->
+    <template is="dom-if" if="{{isAuthorized}}" restamp>
+      <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
+      <app-route
+          route="{{route}}"
+          pattern="[[rootPath]]:page"
+          data="{{routeData}}"
+          tail="{{subroute}}"></app-route>
+      <app-drawer-layout fullbleed narrow="{{narrow}}">
+        <!-- Drawer content -->
+        <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
+          <app-toolbar>Menu</app-toolbar>
 
-		  static get properties() {
-			  return {
-				  page: {
-					  type: String,
-					  reflectToAttribute: true,
-					  observer: '_pageChanged',
-				  },
-				  isAuthorized: {
-					  type: Boolean,
-					  value: false
-				  },
-				  routeData: Object,
-				  subroute: String,
-				  // This shouldn't be neccessary, but the Analyzer isn't picking up
-				  // Polymer.Element#rootPath
-				  rootPath: String,
-			  }
+          <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+
+            <a name="user-list" href="[[rootPath]]user-list">User List</a>
+            <a name="test-page" href="[[rootPath]]test-page">Test page</a>
+            <a name="ajax-request" href="[[rootPath]]ajax-request">ajax-request</a>
+            <!--<a name="view2" href="[[rootPath]]view2">View Two</a>-->
+            <!--<a name="view3" href="[[rootPath]]view3">View Three</a>-->
+            <!--<a name="form" href="[[rootPath]]form">Form</a>-->
+          </iron-selector>
+        </app-drawer>
+        <!-- Main content -->
+        <app-header-layout has-scrolling-region>
+          <app-header slot="header" condenses reveals effects="waterfall">
+            <app-toolbar>
+              <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
+              <div main-title>My App</div>
+              <google-signin></google-signin>
+            </app-toolbar>
+          </app-header>
+          <iron-pages
+              selected="[[page]]"
+              attr-for-selected="name"
+              fallback-selection="view-404"
+              role="main">
+            <user-list name="user-list"></user-list>
+            <test-page name="test-page" who="{{name}}"></test-page>
+            <ajax-request name="ajax-request" response="[[accessToken]]"></ajax-request>
+            <view-404 name="view-404"></view-404>
+          </iron-pages>
+        </app-header-layout>
+      </app-drawer-layout>
+    </template>
+  </template>
+  <script>
 
 
+    class MyApp extends Polymer.Element {
+      static get is() {
+        return 'my-app';
+      }
 
-		  }
+      static get properties() {
+        return {
+          page: {
+            type: String,
+            reflectToAttribute: true,
+            observer: '_pageChanged',
+          },
+          isAuthorized: {
+            type: Boolean,
+            value: false
+          },
+          routeData: Object,
+          subroute: String,
+          // This shouldn't be neccessary, but the Analyzer isn't picking up
+          // Polymer.Element#rootPath
+          rootPath: String,
+        }
+      }
 
-		  static get observers() {
-			  return [
-				  '_routePageChanged(routeData.page)',
-			  ];
-		  }
-	    constructor(){
-		    super();
-		    this.name = 'Roma';
-		    this.accessToken;
+      static get observers() {
+        return [
+          '_routePageChanged(routeData.page)',
+        ];
+      }
 
-	    }
+      constructor() {
+        super();
+        this.name = 'Roma';
+        this.accessToken;
+      }
 
-		  _routePageChanged(page) {
+      _routePageChanged(page) {
 
-			  if (!this.isAuthorized) return;
+        if (!this.isAuthorized) return;
 
-			  // If no page was found in the route data, page will be an empty string.
-			  // Deault to 'view1' in that case.
+        // If no page was found in the route data, page will be an empty string.
+        // Deault to 'view1' in that case.
 
-			  this.page = page || 'user-list';
+        this.page = page || 'user-list';
 
-			  // Close a non-persistent drawer when the page & route are changed.
-			  const drawer = this.$.drawer;
-			  if (drawer && !drawer.persistent) {
-				  this.$.drawer.close();
-			  }
-		  }
+        // Close a non-persistent drawer when the page & route are changed.
+        const drawer = this.$.drawer;
+        if (drawer && !drawer.persistent) {
+          this.$.drawer.close();
+        }
+      }
 
-		  _pageChanged(page) {
-			  // Load page import on demand. Show 404 page if fails
-			  var resolvedPageUrl = this.resolveUrl(page + '.html');
-			  Polymer.importHref(
-				  resolvedPageUrl,
-				  null,
-				  this._showPage404.bind(this),
-				  true);
-		  }
+      _pageChanged(page) {
+        // Load page import on demand. Show 404 page if fails
+        var resolvedPageUrl = this.resolveUrl(page + '.html');
+        Polymer.importHref(
+          resolvedPageUrl,
+          null,
+          this._showPage404.bind(this),
+          true);
+      }
 
-		  _showPage404() {
-			  this.page = 'view-404';
-		  }
+      _showPage404() {
+        this.page = 'view-404';
+      }
 
-		  _handleSignin(response) {
-		  	//получаем  данные пользователя залогиненногочерез гугл
-				// Если авторизация успешна получаем токен от google
-			  this.user = gapi.auth2.getAuthInstance()['currentUser'].get();
-		    this.accessToken = response.detail.access_token;
-		    console.log(this.user);
-		    console.log('User name: ' + this.user.getBasicProfile().getName());
-		  }
-	  }
+      _handleSignin(response) {
+        //получаем  данные пользователя залогиненного через гугл
+        // Если авторизация успешна получаем токен от google
+        this.user = gapi.auth2.getAuthInstance()['currentUser'].get();
+        this.accessToken = response.detail.access_token;
+        console.log(this.user);
+        console.log('User name: ' + this.user.getBasicProfile().getName());
+      }
+    }
 
-	  window.customElements.define(MyApp.is, MyApp);
-	</script>
+    window.customElements.define(MyApp.is, MyApp);
+  </script>
 </dom-module>
