@@ -33,7 +33,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			}
 
 		</style>
-		<pre>User: [[response]]</pre>
+		<pre>User: [[gToken]]</pre>
 		<pre>User: [[headers]]</pre>
 		<button on-click="sendXMLHttpRequest">sendXMLHttpRequest</button>
 		<iron-ajax
@@ -44,11 +44,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			body="{{requestBody}}"
 			handle-as="json"
 			on-response="handleResponse"
+			content-type="application/json"
 			debounce-duration="300">
 		</iron-ajax>
-		<!--params='{{requestBody}}'-->
-		<!--content-type="application/json"-->
-
 	</template>
 
 	<script>
@@ -70,38 +68,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				  customHeader: {
 					  value: 'application/json'
 				  },
-				  response: {
+		      gToken: {
 					  type: String,
 				  },
 				  requestBody: {
 					  type: String,
-					  computed: '_createRequestBody(response)',
+					  computed: '_createRequestBody(gToken)',
 					  notify: true
 				  },
 			  };
 		  }
 
 		  _getHeaders(customHeader) {
-		    let header = {"content-type": customHeader}
-		  console.log(JSON.stringify(header));
-		  return JSON.stringify(header)
-
+			  let header = {"content-type": customHeader}
+			  return JSON.stringify(header)
 		  }
 
-		  _createRequestBody(response) {
-			  let body = { gToken: response }
+		  _createRequestBody(gToken) {
+			  let body = {gToken: gToken}
 			  return JSON.stringify(body)
 		  }
 
-		  sendXMLHttpRequest() {
-			  // ajax call
-//			  console.log("Headers in AJAX: " + this.$.ajax.headers);
-			  //this.$.ajax.body = this.headersProperty;
-//			  this.$.ajax.generateRequest();
-		  }
-
-		  handleResponse(data) {
-			  console.log('получил ответ');
+		  handleResponse(event) {
+			  console.log(event);
 		  }
 
 	  }

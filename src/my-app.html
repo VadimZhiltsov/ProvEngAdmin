@@ -37,9 +37,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="lazy-import" href="user-list.html">
 <link rel="lazy-import" href="test-page.html">
 <link rel="lazy-import" href="ajax-request.html">
-<!--<link rel="lazy-import" href="my-view3.html">-->
+<link rel="lazy-import" href="get-ajax-data.html">
 <link rel="lazy-import" href="view-404.html">
-<!--<link rel="import" href="my-icons.html">-->
 
 <dom-module id="my-app">
   <template>
@@ -97,9 +96,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       ></google-signin-aware>
     </template>
 
-
-    <!--<paper-icon-button class="red" icon="custom-icons:android" on-tap="_signIn">Sign In</paper-icon-button>-->
-    <!--<iron-icon icon="my-icons:android"></iron-icon>-->
     <template is="dom-if" if="{{isAuthorized}}" restamp>
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>
       <app-route
@@ -108,20 +104,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           data="{{routeData}}"
           tail="{{subroute}}"></app-route>
       <app-drawer-layout fullbleed narrow="{{narrow}}">
+
         <!-- Drawer content -->
         <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
           <app-toolbar>Menu</app-toolbar>
-
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-
             <a name="user-list" href="[[rootPath]]user-list">User List</a>
             <a name="test-page" href="[[rootPath]]test-page">Test page</a>
             <a name="ajax-request" href="[[rootPath]]ajax-request">ajax-request</a>
-            <!--<a name="view2" href="[[rootPath]]view2">View Two</a>-->
-            <!--<a name="view3" href="[[rootPath]]view3">View Three</a>-->
-            <!--<a name="form" href="[[rootPath]]form">Form</a>-->
+            <a name="get-ajax-data" href="[[rootPath]]get-ajax-data">get-ajax-data</a>
           </iron-selector>
         </app-drawer>
+
         <!-- Main content -->
         <app-header-layout has-scrolling-region>
           <app-header slot="header" condenses reveals effects="waterfall">
@@ -138,7 +132,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               role="main">
             <user-list name="user-list"></user-list>
             <test-page name="test-page" who="{{name}}"></test-page>
-            <ajax-request name="ajax-request" response="[[accessToken]]"></ajax-request>
+            <ajax-request name="ajax-request" g-token="[[accessToken]]"></ajax-request>
+            <get-ajax-data name="get-ajax-data" g-token="[[accessToken]]"></get-ajax-data>
             <view-404 name="view-404"></view-404>
           </iron-pages>
         </app-header-layout>
@@ -169,6 +164,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           // This shouldn't be neccessary, but the Analyzer isn't picking up
           // Polymer.Element#rootPath
           rootPath: String,
+	        accessToken: String,
         }
       }
 
@@ -176,12 +172,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return [
           '_routePageChanged(routeData.page)',
         ];
-      }
-
-      constructor() {
-        super();
-        this.name = 'Roma';
-        this.accessToken;
       }
 
       _routePageChanged(page) {
