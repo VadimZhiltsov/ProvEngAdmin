@@ -1,0 +1,140 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<!--my imports-->
+
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-meta/iron-meta.html">
+<!--my imports-->
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="get-ajax-data">
+	<template>
+		<style include="shared-styles">
+			:host{
+				display:block;
+				padding:10px;
+			}
+			.horizontal-section p{
+			display:inline-block;
+		}
+			iron-icon{
+				height:50px;
+				width:50px;
+				transition:all 0.2s;
+				-webkit-transition:all 0.2s;
+			}
+
+		</style>
+		<div id="getuser">Имя Юзера</div>
+		<template is="dom-repeat" items="[[eventData.members]]">
+			<div class="horizontal-section">
+				<p>[[item.lastName]]</p>
+			</div>
+		</template>
+		<template is="dom-repeat" items="[[eventData]]">
+			<div class="horizontal-section">
+				<p>[[item.id]]</p>
+				<p>[[item.level]]</p>
+				<p>[[item.name]]</p>
+			</div>
+		</template>
+		<button on-click="setAjaxGroups">getAjaxGroups</button>
+		<button on-click="setAjaxGroup">getAjaxGroup</button>
+		<button on-click="setAjaxUser">getAjaxUser</button>
+		<iron-ajax
+			id="ajax"
+			method="get"
+			on-response="requestType"
+			handle-as="json"
+			content-type="application/json"
+			debounce-duration="300">
+		</iron-ajax>
+	</template>
+
+
+	<script>
+	  class GetAjaxData extends Polymer.Element {
+		  static get is() {
+			  return 'get-ajax-data';
+		  }
+
+		  static get properties() {
+			  return {
+				  apiEndPoint: {
+					  type: String,
+					  value: 'http://proveng.cloud.provectus-it.com'
+				  },
+				  gToken: {
+					  type: String,
+				  },
+				  headers: {
+					  type: String,
+					  computed: '_getHeaders()'
+				  },
+				  data: {
+					  type: Array,
+					  notify: true
+				  },
+				  eventData: {
+					  type: Array,
+					  notify: true
+				  }
+			  };
+		  }
+
+
+		  _getHeaders() {
+			  let header = {token: this.gToken};
+			  return header
+		  }
+
+		  setAjaxUser() {
+		    this.requestType = this._responseUser;
+			  this.$.ajax.url = `${this.apiEndPoint}/rest/mock/user`;
+			  this.$.ajax.headers = this.headers;
+			  this.$.ajax.generateRequest();
+		  }
+
+		  setAjaxGroup() {
+		    this.requestType = this._responseGroup;
+			  this.$.ajax.url = `${this.apiEndPoint}/rest/mock/group`;
+			  this.$.ajax.headers = this.headers;
+			  this.$.ajax.generateRequest();
+		  }
+		  setAjaxGroups() {
+			  this.requestType = this._responseGroups;
+			  this.$.ajax.url = `${this.apiEndPoint}/rest/mock/groups`;
+			  this.$.ajax.headers = this.headers;
+//		    this.$.ajax.set('params', {group_id: 5});
+			  this.$.ajax.generateRequest();
+		  }
+
+		  _responseUser(event) {
+			    this.event = event.detail.response.result;
+			    this.$.getuser.textContent = this.event.firstName;
+		  }
+
+		  _responseGroup(event) {
+			  this.eventData = event.detail.response.result;
+//			  console.log(this.eventData);
+		  }
+		  _responseGroups(event) {
+			  this.eventData = event.detail.response.result;
+//			  console.log(this.eventData);
+		  }
+
+	  }
+
+	  window.customElements.define(GetAjaxData.is, GetAjaxData);
+	</script>
+</dom-module>
