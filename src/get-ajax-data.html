@@ -24,9 +24,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				display:block;
 				padding:10px;
 			}
+
 			.horizontal-section p{
-			display:inline-block;
-		}
+				display:inline-block;
+			}
+
 			iron-icon{
 				height:50px;
 				width:50px;
@@ -51,9 +53,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		<button on-click="setAjaxGroups">getAjaxGroups</button>
 		<button on-click="setAjaxGroup">getAjaxGroup</button>
 		<button on-click="setAjaxUser">getAjaxUser</button>
+		<button on-click="setLogOut">setLogOut</button>
+		<button on-click="createGroup">newGroup</button>
 		<iron-ajax
 			id="ajax"
-			method="get"
 			on-response="requestType"
 			handle-as="json"
 			content-type="application/json"
@@ -99,42 +102,69 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		  }
 
 		  setAjaxUser() {
-		    this.requestType = this._responseUser;
+			  this.requestType = this._responseUser;
+		    this.$.ajax.method = 'get';
 			  this.$.ajax.url = `${this.apiEndPoint}/rest/mock/user`;
 			  this.$.ajax.headers = this.headers;
 			  this.$.ajax.generateRequest();
 		  }
 
 		  setAjaxGroup() {
-		    this.requestType = this._responseGroup;
+			  this.requestType = this._responseGroup;
+		    this.$.ajax.method = 'get';
 			  this.$.ajax.url = `${this.apiEndPoint}/rest/mock/group`;
 			  this.$.ajax.headers = this.headers;
 			  this.$.ajax.generateRequest();
 		  }
+
 		  setAjaxGroups() {
 			  this.requestType = this._responseGroups;
+		    this.$.ajax.method = 'get';
 			  this.$.ajax.url = `${this.apiEndPoint}/rest/mock/groups`;
 			  this.$.ajax.headers = this.headers;
-//		    this.$.ajax.set('params', {group_id: 5});
+//		  this.$.ajax.set('params', {group_id: 5});
 			  this.$.ajax.generateRequest();
 		  }
+	    setLogOut() {
+		    this.requestType = this._logOut;
+		    this.$.ajax.method = 'post';
+		    this.$.ajax.url = `${this.apiEndPoint}/rest/mock/logout`;
+		    this.$.ajax.headers = this.headers;
+		    this.$.ajax.generateRequest();
+	    }
+	    createGroup() {
+		    this.requestType = this._createGroup;
+		    this.$.ajax.method = 'post';
+		    this.$.ajax.url = `${this.apiEndPoint}/rest/mock/group`;
+	      this.$.ajax.body = {"name":'Group9'};
+		    this.$.ajax.headers = this.headers;
+		    this.$.ajax.generateRequest();
+	    }
 
 		  _responseUser(event) {
-			    this.event = event.detail.response.result;
-			    this.$.getuser.textContent = this.event.firstName;
+			  this.event = event.detail.response.result;
+			  this.$.getuser.textContent = this.event.firstName;
 		  }
 
 		  _responseGroup(event) {
 			  this.eventData = event.detail.response.result;
-//			  console.log(this.eventData);
+//			console.log(this.eventData);
 		  }
+
 		  _responseGroups(event) {
 			  this.eventData = event.detail.response.result;
-//			  console.log(this.eventData);
+//			console.log(this.eventData);
 		  }
 
-	  }
+	    _logOut(event) {
+		    this.logOut = event.detail.response.result;
+//				console.log(this.logOut);
+	    }
 
+	    _createGroup(event) {
+				console.log(event);
+	    }
+	  }
 	  window.customElements.define(GetAjaxData.is, GetAjaxData);
 	</script>
 </dom-module>
