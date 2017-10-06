@@ -36,7 +36,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="my-icons.html">
 <link rel="lazy-import" href="user-list.html">
 <link rel="lazy-import" href="test-page.html">
-<link rel="lazy-import" href="ajax-request.html">
 <link rel="lazy-import" href="get-ajax-data.html">
 <link rel="lazy-import" href="view-404.html">
 
@@ -111,7 +110,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
             <a name="user-list" href="[[rootPath]]user-list">User List</a>
             <a name="test-page" href="[[rootPath]]test-page">Test page</a>
-            <a name="ajax-request" href="[[rootPath]]ajax-request">ajax-request</a>
             <a name="get-ajax-data" href="[[rootPath]]get-ajax-data">get-ajax-data</a>
           </iron-selector>
         </app-drawer>
@@ -132,7 +130,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               role="main">
             <user-list name="user-list"></user-list>
             <test-page name="test-page" who="{{name}}"></test-page>
-            <ajax-request name="ajax-request" g-token="[[accessToken]]"></ajax-request>
             <get-ajax-data name="get-ajax-data" g-token="[[accessToken]]"></get-ajax-data>
             <view-404 name="view-404"></view-404>
           </iron-pages>
@@ -207,10 +204,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _handleSignin(response) {
         //получаем  данные пользователя залогиненного через гугл
         // Если авторизация успешна получаем токен от google
+
         this.user = gapi.auth2.getAuthInstance()['currentUser'].get();
         this.accessToken = response.detail.access_token;
-        console.log(this.user);
-        console.log('User name: ' + this.user.getBasicProfile().getName());
+	      console.log(this.accessToken);
       }
     }
 

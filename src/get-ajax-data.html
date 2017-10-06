@@ -13,6 +13,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/iron-meta/iron-meta.html">
+<link rel="import" href="../bower_components/paper-datatable-api/paper-datatable-api-column.html">
+<link rel="import" href="../bower_components/paper-datatable-api/paper-datatable-api.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <!--my imports-->
 
 <link rel="import" href="shared-styles.html">
@@ -25,8 +29,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				padding:10px;
 			}
 
-			.horizontal-section p{
-				display:inline-block;
+			/*.horizontal-section p{*/
+			/*display:inline-block;*/
+			/*}*/
+			paper-card{
+				display:block;
 			}
 
 			iron-icon{
@@ -37,24 +44,174 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			}
 
 		</style>
-		<div id="getuser">Имя Юзера</div>
-		<template is="dom-repeat" items="[[eventData.members]]">
-			<div class="horizontal-section">
-				<p>[[item.lastName]]</p>
+		<div id="getAuth">Google Auth</div>
+		<paper-card heading="User list">
+			<div class="card-content">
+				<paper-datatable-api
+					paginate
+					selectable
+					filters
+					page="{{page}}"
+					size="{{size}}"
+					available-size="[2, 4]"
+					toggle-columns="{{toggleColumns}}"
+					on-sort="_handleSort"
+					on-filter="_handleFilter"
+					selected-rows={{selectedRows}}
+					on-selection-changed="_handleSelectionChanged"
+					total-elements="[[totalElements]]"
+					total-pages="[[totalPages]]"
+					data="[[eventData]]">
+					<paper-datatable-api-column
+						header="id"
+						property="id"
+						draggable-column
+						filter>
+						<template>
+							<span>{{value}}</span>
+						</template>
+					</paper-datatable-api-column>
+					<paper-datatable-api-column
+						header="First Name"
+						property="firstName"
+						draggable-column
+						filter>
+						<template>
+							<span>{{value}}</span>
+						</template>
+					</paper-datatable-api-column>
+					<paper-datatable-api-column
+						header="Last Name"
+						property="lastName"
+						draggable-column
+						filter>
+						<template>
+							<span>{{value}}</span>
+						</template>
+					</paper-datatable-api-column>
+				</paper-datatable-api>
 			</div>
-		</template>
-		<template is="dom-repeat" items="[[eventData]]">
-			<div class="horizontal-section">
-				<p>[[item.id]]</p>
-				<p>[[item.level]]</p>
-				<p>[[item.name]]</p>
+		</paper-card>
+		<paper-card heading="Group list">
+			<div class="card-content">
+				<paper-datatable-api
+					paginate
+					selectable
+					filters
+					page="{{page}}"
+					size="{{size}}"
+					toggle-columns="{{toggleColumns}}"
+					on-sort="_handleSort"
+					on-filter="_handleFilter"
+					selected-rows={{selectedRows}}
+					on-selection-changed="_handleSelectionChanged"
+					total-elements="[[totalElements]]"
+					total-pages="[[totalPages]]"
+					data="[[groupData]]">
+					<paper-datatable-api-column
+						header="id"
+						property="id"
+						sortable
+						draggable-column
+						filter>
+						<template>
+							<span>{{value}}</span>
+						</template>
+					</paper-datatable-api-column>
+					<paper-datatable-api-column
+						header="name"
+						property="name"
+						draggable-column
+						filter>
+						<template>
+							<span>{{value}}</span>
+						</template>
+					</paper-datatable-api-column>
+					<paper-datatable-api-column
+						header="Leader"
+						property="leader"
+						draggable-column
+						filter>
+						<template>
+							<span>ID:{{value.id}}</span>
+							<span>{{value.firstName}}</span>
+							<span>{{value.lastName}}</span>
+						</template>
+					</paper-datatable-api-column>
+					<paper-datatable-api-column
+						header="Level"
+						property="level"
+						draggable-column
+						filter>
+						<template>
+							<span>{{value}}</span>
+						</template>
+					</paper-datatable-api-column>
+					<paper-datatable-api-column
+						header="Members"
+						property="members"
+						draggable-column
+						filter>
+						<template>
+							<span>{{value}}</span>
+						</template>
+					</paper-datatable-api-column>
+				</paper-datatable-api>
 			</div>
-		</template>
-		<button on-click="setAjaxGroups">getAjaxGroups</button>
-		<button on-click="setAjaxGroup">getAjaxGroup</button>
-		<button on-click="setAjaxUser">getAjaxUser</button>
-		<button on-click="setLogOut">setLogOut</button>
-		<button on-click="createGroup">newGroup</button>
+		</paper-card>
+		<paper-card heading="Groups list">
+			<div class="card-content">
+				<paper-datatable-api
+					paginate
+					selectable
+					filters
+					page="{{page}}"
+					size="{{size}}"
+					available-size="[2, 4]"
+					toggle-columns="{{toggleColumns}}"
+					on-sort="_handleSort"
+					on-filter="_handleFilter"
+					selected-rows={{selectedRows}}
+					on-selection-changed="_handleSelectionChanged"
+					total-elements="[[totalElements]]"
+					total-pages="[[totalPages]]"
+					data="[[groupsData]]">
+					<paper-datatable-api-column
+						header="id"
+						property="id"
+						draggable-column
+						filter>
+						<template>
+							<span>{{value}}</span>
+						</template>
+					</paper-datatable-api-column>
+					<paper-datatable-api-column
+						header="Name"
+						property="name"
+						draggable-column
+						filter>
+						<template>
+							<span>{{value}}</span>
+						</template>
+					</paper-datatable-api-column>
+					<paper-datatable-api-column
+						header="Level"
+						property="level"
+						draggable-column
+						filter>
+						<template>
+							<span>{{value}}</span>
+						</template>
+					</paper-datatable-api-column>
+				</paper-datatable-api>
+			</div>
+		</paper-card>
+		<paper-button toggles raised class="custom blue" on-click="getAjaxUserAuth">User Auth</paper-button>
+		<paper-button toggles raised class="custom green" on-click="getAjaxGroups">Groups list</paper-button>
+		<paper-button toggles raised class="custom green" on-click="getAjaxGroup">Group list</paper-button>
+		<paper-button toggles raised class="custom green" on-click="getAjaxUser">User list</paper-button>
+		<paper-button toggles raised class="custom blue" on-click="logOut">logOut</paper-button>
+		<paper-button toggles raised class="custom blue" on-click="createGroup">newGroup</paper-button>
 		<iron-ajax
 			id="ajax"
 			on-response="requestType"
@@ -63,7 +220,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			debounce-duration="300">
 		</iron-ajax>
 	</template>
-
 
 	<script>
 	  class GetAjaxData extends Polymer.Element {
@@ -82,88 +238,153 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				  },
 				  headers: {
 					  type: String,
-					  computed: '_getHeaders()'
+					  computed: '_createHeaders(gToken)'
 				  },
-				  data: {
-					  type: Array,
-					  notify: true
+				  body: {
+					  type: String,
+					  computed: '_createBody(gToken)',
 				  },
 				  eventData: {
 					  type: Array,
-					  notify: true
+				  },
+				  groupData: {
+					  type: Array,
+				  },
+				  groupsData: {
+					  type: Array,
+				  },
+				  sortProperty: {
+					  type: String,
+				  },
+				  raiseddd: {
+					  type: Boolean,
+					  value: false,
 				  }
 			  };
 		  }
 
+		  _createBody(gToken) {
+			  let bodys = {gToken: gToken};
+			  return bodys;
+		  }
 
-		  _getHeaders() {
-			  let header = {token: this.gToken};
+		  _createHeaders(gToken) {
+			  let header = {token: gToken};
+			  console.log(header);
 			  return header
 		  }
 
-		  setAjaxUser() {
+		  getAjaxUserAuth() {
+			  this.requestType = this._responseUserAuth;
+			  this.$.ajax.method = 'post';
+			  this.$.ajax.url = `${this.apiEndPoint}/rest/v1/auth-by-google`;
+			  this.$.ajax.body = this.body;
+			  this.$.ajax.generateRequest();
+		  }
+
+		  getAjaxUser() {
 			  this.requestType = this._responseUser;
-		    this.$.ajax.method = 'get';
+			  this.$.ajax.method = 'get';
 			  this.$.ajax.url = `${this.apiEndPoint}/rest/mock/user`;
 			  this.$.ajax.headers = this.headers;
 			  this.$.ajax.generateRequest();
 		  }
 
-		  setAjaxGroup() {
-			  this.requestType = this._responseGroup;
-		    this.$.ajax.method = 'get';
+		  getAjaxGroup() {
+			  this.$.ajax.method = 'get';
 			  this.$.ajax.url = `${this.apiEndPoint}/rest/mock/group`;
 			  this.$.ajax.headers = this.headers;
 			  this.$.ajax.generateRequest();
+			  this.requestType = this._responseGroup;
 		  }
 
-		  setAjaxGroups() {
+		  getAjaxGroups() {
 			  this.requestType = this._responseGroups;
-		    this.$.ajax.method = 'get';
+			  this.$.ajax.method = 'get';
 			  this.$.ajax.url = `${this.apiEndPoint}/rest/mock/groups`;
 			  this.$.ajax.headers = this.headers;
-//		  this.$.ajax.set('params', {group_id: 5});
 			  this.$.ajax.generateRequest();
 		  }
-	    setLogOut() {
-		    this.requestType = this._logOut;
-		    this.$.ajax.method = 'post';
-		    this.$.ajax.url = `${this.apiEndPoint}/rest/mock/logout`;
-		    this.$.ajax.headers = this.headers;
-		    this.$.ajax.generateRequest();
-	    }
-	    createGroup() {
-		    this.requestType = this._createGroup;
-		    this.$.ajax.method = 'post';
-		    this.$.ajax.url = `${this.apiEndPoint}/rest/mock/group`;
-	      this.$.ajax.body = {"name":'Group9'};
-		    this.$.ajax.headers = this.headers;
-		    this.$.ajax.generateRequest();
-	    }
+
+		  logOut() {
+			  this.requestType = this._logOut;
+			  this.$.ajax.method = 'post';
+			  this.$.ajax.url = `${this.apiEndPoint}/rest/mock/logout`;
+			  this.$.ajax.headers = this.headers;
+			  this.$.ajax.generateRequest();
+		  }
+
+		  createGroup() {
+			  this.requestType = this._createGroup;
+			  this.$.ajax.method = 'post';
+			  this.$.ajax.url = `${this.apiEndPoint}/rest/mock/group`;
+			  this.$.ajax.body = {'group': {'name': 'Group9'}};
+			  this.$.ajax.headers = this.headers;
+			  this.$.ajax.generateRequest();
+		  }
+
+		  _responseUserAuth(event) {
+			  this.event = event.detail.response.result;
+			  this.$.getAuth.textContent = `UserId: ${this.event.userId}; token: ${this.event.token}`;
+		  }
 
 		  _responseUser(event) {
-			  this.event = event.detail.response.result;
-			  this.$.getuser.textContent = this.event.firstName;
+			  if (this.raiseddd) {
+				  this.eventData = [];
+				  this.raiseddd = false;
+				  return
+			  }
+			  this.raiseddd = true;
+			  let arrData = [];
+			  arrData.push(event.detail.response.result);
+			  return this.eventData = arrData;
 		  }
 
 		  _responseGroup(event) {
-			  this.eventData = event.detail.response.result;
-//			console.log(this.eventData);
+			  if (this.raiseddd) {
+				  this.groupData = [];
+				  this.raiseddd = false;
+				  return
+			  }
+			  this.raiseddd = true;
+			  let arrData = [];
+			  arrData.push(event.detail.response.result);
+			  return this.groupData = arrData;
 		  }
 
 		  _responseGroups(event) {
-			  this.eventData = event.detail.response.result;
-//			console.log(this.eventData);
+			  if (this.raiseddd) {
+				  this.groupsData = [];
+				  this.raiseddd = false;
+				  return
+			  }
+			  this.raiseddd = true;
+			  this.groupsData = event.detail.response.result;
+
 		  }
 
-	    _logOut(event) {
-		    this.logOut = event.detail.response.result;
+		  _logOut(event) {
+			  this.logOut = event.detail.response.result;
 //				console.log(this.logOut);
-	    }
+		  }
 
-	    _createGroup(event) {
-				console.log(event);
-	    }
+		  _createGroup(event) {
+			  console.log(event);
+		  }
+
+//		  _handleSort(event) {
+//			  this.sortProperty = event.detail.sort.property + ',' + event.detail.sort.direction;
+//		  }
+//
+//		  _handleFilter(event) {
+//			  var divLocal = document.createElement('div');
+//			  var filter = event.detail.filter.value;
+//			  var column = event.detail.filter.property;
+//			  var eventRow = document.createTextNode(filter + ' is filtered on ' + column + ' column');
+//			  Polymer.dom(divLocal).appendChild(eventRow);
+//			  Polymer.dom(this.$.paperCardEvent).querySelector('.card-content').appendChild(divLocal);
+//		  }
+
 	  }
 	  window.customElements.define(GetAjaxData.is, GetAjaxData);
 	</script>
