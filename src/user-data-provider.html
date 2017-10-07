@@ -33,17 +33,42 @@
           data: {
             type: Array,
             notify: true
+          },
+          sortProperty: {
+            type: String,
+            observer: '_sortPropertyChanged'
           }
         }
       }
       _handleResponse(event) {
         this.data = event.detail.response.result;
-        console.log(this.data);
       }
 
       _getHeaders() {
-        let customHeader = new Polymer.IronMeta({key: 'localToken'}).value;
-        return {token: customHeader};
+        let _customHeader = new Polymer.IronMeta({key: 'localToken'}).value;
+        return {token: _customHeader};
+      }
+
+      _sortPropertyChanged(sort) {
+        let property = [sort.split(/,/)];
+        let head = property[0][0];
+        let direction = property[0][1];
+
+        let compare;
+        switch (direction){
+          case 'asc':
+            compare = function (a, b) {
+              return a.firstName > b.firstName;
+            };
+            break;
+          case 'desc':
+            compare = function (a, b) {
+              return b.firstName > a.firstName;
+            };
+            break;
+        }
+
+        this.data.sort(compare);
       }
     }
     window.customElements.define(UserDataProvider.is, UserDataProvider);
