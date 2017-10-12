@@ -6,10 +6,11 @@
 
   <template>
     <iron-ajax
+      id="ajax"
       auto
       method="get"
-      url="[[apiEndPoint]]/rest/mock/users"
-      headers={{headers}}
+      url="[[apiEndPoint]]/rest/v1/users"
+      headers=[[headers]]
       handle-as="json"
       content-type="application/json"
       on-response="_handleResponse">
@@ -34,41 +35,93 @@
             type: Array,
             notify: true
           },
+          _response: {
+            type: Array
+          },
           sortProperty: {
             type: String,
             observer: '_sortPropertyChanged'
-          }
+          },
+          selectedProperty: {
+            type: String,
+            observer: '_selectedPropertyChanged'
+          },
+          page: {
+            type: Number,
+            notify: true,
+            value: 0,
+            observer: '_handlePageChanged'
+          },
+          size: {
+            type: Number,
+            notify: true,
+            value: 10,
+            observer: '_handleSizeChanged'
+          },
+          totalElements: {
+            type: Number,
+            notify: true,
+            value: 0
+          },
+          totalPages: {
+            type: Number,
+            notify: true,
+            value: 0
+          },
         }
       }
       _handleResponse(event) {
-        this.data = event.detail.response.result;
+        this._response = event.detail.response.result;
+        this.totalElements = this._response.length;
+        this.totalPages = Math.ceil(this.totalElements/this.size);
+        this.data = this._response.slice(0, this.size);
       }
 
       _getHeaders() {
-        let _customHeader = new Polymer.IronMeta({key: 'localToken'}).value;
+        let _customHeader = "1506725785849testprovengroot@gmail.com";
+          //new Polymer.IronMeta({key: 'localToken'}).value;
         return {token: _customHeader};
       }
 
+      _selectedPropertyChanged(selected) {
+        this.$.ajax.set( 'params', {'roleName': selected});
+      }
+
       _sortPropertyChanged(sort) {
-        let property = [sort.split(/,/)];
-        let head = property[0][0];
-        let direction = property[0][1];
+        let properties = [];
+        properties = sort.split(/,/);
+        let property = properties[0];
+        let direction = properties[1];
 
         let compare;
         switch (direction){
           case 'asc':
-            compare = function (a, b) {
-              return a.firstName > b.firstName;
+            compare = function (rowA, rowB) {
+              return rowA[property] > rowB[property] ? 1 : rowA[property] < rowB[property] ? -1 : 0;
             };
             break;
           case 'desc':
-            compare = function (a, b) {
-              return b.firstName > a.firstName;
+            compare = function (rowA, rowB) {
+              return rowA[property] > rowB[property] ? -1 : rowA[property] < rowB[property] ? 1 : 0;
             };
             break;
         }
 
-        this.data.sort(compare);
+        this._response.sort(compare);
+        this.data = this._response.slice(0, this.size);
+      }
+      _handleSizeChanged (size) {
+        if(this._response){
+          this.data = this._response.slice(0, this.size);
+          this.totalPages = Math.ceil(this.totalElements/size);
+        }
+      }
+      _handlePageChanged (page) {
+        if(this._response){
+          let begin = page * this.size;
+          let end = (page * this.size) + this.size;
+          this.data = this._response.slice(begin, end);
+        }
       }
     }
     window.customElements.define(UserDataProvider.is, UserDataProvider);

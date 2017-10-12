@@ -83,17 +83,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <template is="dom-if" if="{{!isAuthorized}}" restamp>
       <google-signin
-          client-id="352789647391-vq04b3va9ht4ie1ggig3r4crlfn8946r.apps.googleusercontent.com"
-          brand="google" width="wide"
-          is-authorized="{{isAuthorized}}"
-          hosted-domain=""
-      ></google-signin>
-      <google-signin-aware
-          scopes="https://www.googleapis.com/auth/drive"
-          offline
-          on-google-signin-aware-success="_handleSignin"
-      ></google-signin-aware>
-    </template>
+      client-id="352789647391-vq04b3va9ht4ie1ggig3r4crlfn8946r.apps.googleusercontent.com"
+      brand="google" width="wide"
+      is-authorized="{{isAuthorized}}"
+      hosted-domain=""
+  ></google-signin>
+    <google-signin-aware
+        scopes="https://www.googleapis.com/auth/drive"
+        offline
+        on-google-signin-aware-success="_handleSignin"
+    ></google-signin-aware>
+  </template>
 
     <template is="dom-if" if="{{isAuthorized}}" restamp>
       <app-location route="{{route}}" url-space-regex="^[[rootPath]]"></app-location>

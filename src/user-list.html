@@ -12,6 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-datatable-api/paper-datatable-api-column.html">
 <link rel="import" href="../bower_components/paper-datatable-api/paper-datatable-api.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="shared-styles.html">
 
 <link rel="import" href="user-data-provider.html">
@@ -22,67 +23,104 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       :host {
         display: block;
         padding: 10px;
+
+        --paper-datatable-api-checked-checkbox-color: var(--paper-pink-500);
+        --paper-datatable-apa-tr-selected-background: var(--paper-blue-grey-900);
+      }
+
+      paper-dropdown-menu {
+        width: 200px;
+        margin-left: 16px;
+      }
+
+      paper-card {
+        width: 100%;
       }
     </style>
 
     <user-data-provider
         data="{{dataFromApi}}"
-        sort-property="[[sortProperty]]">
+        page="{{page}}"
+        size="{{size}}"
+        total-elements="{{totalElements}}"
+        total-pages="{{totalPages}}"
+        sort-property="[[sortProperty]]"
+        selected-property="[[selectedProperty]]">
     </user-data-provider>
 
-    <paper-card heading="Users list">
-    <div class="card-content">
-      <paper-datatable-api
-          paginate
-          selectable
-          filters
-          page="{{page}}"
-          size="{{size}}"
-          available-size="[2, 4]"
-          toggle-columns="{{toggleColumns}}"
-          on-sort="_handleSort"
-          on-filter="_handleFilter"
-          selected-rows={{selectedRows}}
-          on-selection-changed="_handleSelectionChanged"
-          total-elements="[[totalElements]]"
-          total-pages="[[totalPages]]"
-          data="[[dataFromApi]]">
-        <paper-datatable-api-column
-            header="id"
-            property="id"
-            draggable-column
-            sortable
-            filter>
-          <template>
-            <span>{{value}}</span>
-          </template>
-        </paper-datatable-api-column>
-        <paper-datatable-api-column
-            header="First Name"
-            property="firstName"
-            draggable-column
-            sortable
-            filter>
-          <template>
-            <span>{{value}}</span>
-          </template>
-        </paper-datatable-api-column>
-        <paper-datatable-api-column
-            header="Last Name"
-            property="lastName"
-            draggable-column
-            filter>
-          <template>
-            <span>{{value}}</span>
-          </template>
-        </paper-datatable-api-column>
-      </paper-datatable-api>
-    </div>
-    </paper-card>
-    <paper-card id="paperCardEvent" heading="Events">
-      <div class="card-content"></div>
+    <paper-card heading="User list">
+      <div>
+        <paper-dropdown-menu id="role_menu" label="Role">
+          <paper-listbox slot="dropdown-content" attr-for-selected="label" selected="{{selectedProperty}}">
+            <template is="dom-repeat" items="{{selectionProperty}}">
+              <paper-item label="{{item}}">{{item}}</paper-item>
+            </template>
+          </paper-listbox>
+        </paper-dropdown-menu>
+      </div>
+      <div class="card-content">
+        <paper-datatable-api
+            paginate
+            selectable
+            filters
+            page="{{page}}"
+            size="{{size}}"
+            available-size="[10, 25, 50, 100]"
+            toggle-columns="{{toggleColumns}}"
+            on-sort="_handleSort"
+            on-filter="_handleFilter"
+            selected-rows={{selectedRows}}
+            on-selection-changed="_handleSelectionChanged"
+            total-elements="[[totalElements]]"
+            total-pages="[[totalPages]]"
+            data="[[dataFromApi]]">
+          <paper-datatable-api-column
+              header="id"
+              property="id"
+              draggable-column
+              sortable>
+            <template>
+              <span>{{value}}</span>
+            </template>
+          </paper-datatable-api-column>
+          <paper-datatable-api-column
+              header="First Name"
+              property="firstName"
+              draggable-column
+              sortable
+              filter>
+            <template>
+              <span>{{value}}</span>
+            </template>
+          </paper-datatable-api-column>
+          <paper-datatable-api-column
+              header="Last Name"
+              property="lastName"
+              draggable-column
+              sortable
+              filter>
+            <template>
+              <span>{{value}}</span>
+            </template>
+          </paper-datatable-api-column>
+          <paper-datatable-api-column
+              header="English Level"
+              property="level"
+              draggable-column
+              sortable
+              filter>
+            <template>
+              <span>{{value}}</span>
+            </template>
+          </paper-datatable-api-column>
+        </paper-datatable-api>
+      </div>
     </paper-card>
   </template>
+
+  <paper-card id="paperCardEvent" heading="Events">
+    <div class="card-content"></div>
+  </paper-card>
 
   <script>
     /* eslint-disable linebreak-style,space-before-function-paren,max-len,comma-dangle,semi,linebreak-style,linebreak-style,no-trailing-spaces */
@@ -95,16 +133,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       static get properties() {
         return {
           sortProperty: {
+            type: String
+          },
+          selectionProperty: {
+            type: Array,
+            value: function () {
+              return ['Student', 'Teacher', 'Administrator', 'Guest']
+            }
+          },
+          selectedProperty: {
             type: String,
+            value: 'Student'
           }
         }
       }
 
-      _handleSort (event) {
+      _handleSort(event) {
         this.sortProperty = event.detail.sort.property + ',' + event.detail.sort.direction;
       }
 
-      _handleFilter (event) {
+      _handleFilter(event) {
         var divLocal = document.createElement('div');
         var filter = event.detail.filter.value;
         var column = event.detail.filter.property;
