@@ -13,13 +13,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-datatable-api/paper-datatable-api.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
 <link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="shared-styles.html">
 
 <link rel="import" href="user-data-provider.html">
 
 <dom-module id="user-list">
   <template>
-    <style include="shared-styles">
+    <style include="shared-styles iron-flex iron-flex-alignment">
       :host {
         display: block;
         padding: 10px;
@@ -30,7 +31,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       paper-dropdown-menu {
         width: 200px;
-        margin-left: 16px;
+        margin-right: 16px;
       }
 
       paper-card {
@@ -49,7 +50,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </user-data-provider>
 
     <paper-card heading="User list">
-      <div>
+      <div class="layout horizontal end-justified">
         <paper-dropdown-menu id="role_menu" label="Role">
           <paper-listbox slot="dropdown-content" attr-for-selected="label" selected="{{selectedProperty}}">
             <template is="dom-repeat" items="{{selectionProperty}}">
