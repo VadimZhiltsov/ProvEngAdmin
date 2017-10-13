@@ -42,6 +42,10 @@
             type: String,
             observer: '_sortPropertyChanged'
           },
+          filterProperty: {
+            type: String,
+            observer: '_filterPropertyChanged'
+          },
           selectedProperty: {
             type: String,
             observer: '_selectedPropertyChanged'
@@ -87,9 +91,9 @@
         this.$.ajax.set( 'params', {'roleName': selected});
       }
 
-      _sortPropertyChanged(sort) {
+      _sortPropertyChanged(string) {
         let properties = [];
-        properties = sort.split(/,/);
+        properties = string.split(/,/);
         let property = properties[0];
         let direction = properties[1];
 
@@ -110,6 +114,35 @@
         this._response.sort(compare);
         this.data = this._response.slice(0, this.size);
       }
+
+      _filterPropertyChanged(string) {
+        let filters = [];
+        let result = [];
+
+        if (!string) {
+          this.data = this._response.slice(0, this.size);
+          return null;
+        } else {
+          filters = string.split(/,/);
+          let filter = filters[0].toLowerCase();
+          let column = filters[1];
+          for(let i = 0; i < this._response.length; i++) {
+            if(this._response[i][column].toLowerCase() === filter) {
+              result.push(this._response[i]);
+            }
+          }
+          this.data = result.slice(0, this.size);
+        }
+
+       // for (let i = 0; i < this._response.length; i++) {
+       //   console.log(this._response[i].filter);
+
+         // if (this._response[filterColumn] == filterValue) {
+         //   console.log("aaaa");
+        //  }
+       // }
+      }
+
       _handleSizeChanged (size) {
         if(this._response){
           this.data = this._response.slice(0, this.size);

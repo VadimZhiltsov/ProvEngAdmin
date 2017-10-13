@@ -46,7 +46,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         total-elements="{{totalElements}}"
         total-pages="{{totalPages}}"
         sort-property="[[sortProperty]]"
-        selected-property="[[selectedProperty]]">
+        selected-property="[[selectedProperty]]"
+        filter-property="[[filterProperty]]">
     </user-data-provider>
 
     <paper-card heading="User list">
@@ -136,6 +137,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           sortProperty: {
             type: String
           },
+          filterProperty: {
+            type: String
+          },
           selectionProperty: {
             type: Array,
             value: function () {
@@ -154,12 +158,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       _handleFilter(event) {
-        var divLocal = document.createElement('div');
-        var filter = event.detail.filter.value;
-        var column = event.detail.filter.property;
-        var eventRow = document.createTextNode(filter + ' is filtered on ' + column + ' column');
-        Polymer.dom(divLocal).appendChild(eventRow);
-        Polymer.dom(this.$.paperCardEvent).querySelector('.card-content').appendChild(divLocal);
+        let filter = event.detail.filter.value;
+        let column = event.detail.filter.property;
+        this.filterProperty = filter + ',' + column;
       }
     }
 
