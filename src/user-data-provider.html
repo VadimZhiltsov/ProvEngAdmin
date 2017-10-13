@@ -118,14 +118,14 @@
       _filterPropertyChanged(string) {
         let filters = [];
         let result = [];
+        filters = string.split(/,/);
+        let filter = filters[0].toLowerCase();
+        let column = filters[1];
 
-        if (!string) {
+        if (!filter || !column) {
           this.data = this._response.slice(0, this.size);
           return null;
         } else {
-          filters = string.split(/,/);
-          let filter = filters[0].toLowerCase();
-          let column = filters[1];
           for(let i = 0; i < this._response.length; i++) {
             if(this._response[i][column].toLowerCase() === filter) {
               result.push(this._response[i]);
