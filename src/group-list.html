@@ -1,0 +1,149 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-datatable-api/paper-datatable-api-column.html">
+<link rel="import" href="../bower_components/paper-datatable-api/paper-datatable-api.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="shared-styles.html">
+
+<link rel="import" href="group-data-provider.html">
+
+<dom-module id="group-list">
+  <template>
+    <style include="shared-styles iron-flex iron-flex-alignment">
+      :host {
+        display: block;
+        padding: 10px;
+
+        --paper-datatable-api-checked-checkbox-color: var(--paper-pink-500);
+        --paper-datatable-apa-tr-selected-background: var(--paper-blue-grey-900);
+      }
+
+      paper-dropdown-menu {
+        width: 200px;
+        margin-right: 16px;
+      }
+
+      paper-card {
+        width: 100%;
+      }
+    </style>
+
+    <group-data-provider
+        data="{{dataFromApi}}"
+        page="{{page}}"
+        size="{{size}}"
+        total-elements="{{totalElements}}"
+        total-pages="{{totalPages}}"
+        sort-property="[[sortProperty]]"
+        selected-property="[[selectedProperty]]"
+        filter-property="[[filterProperty]]">
+    </group-data-provider>
+
+    <paper-card heading="Group list">
+      <div class="card-content">
+        <paper-datatable-api
+            paginate
+            selectable
+            filters
+            language="en-us"
+            page="{{page}}"
+            size="{{size}}"
+            available-size="[5, 10, 15, 20]"
+            toggle-columns="{{toggleColumns}}"
+            on-sort="_handleSort"
+            on-filter="_handleFilter"
+            selected-rows={{selectedRows}}
+            on-selection-changed="_handleSelectionChanged"
+            total-elements="[[totalElements]]"
+            total-pages="[[totalPages]]"
+            data="[[dataFromApi]]">
+          <paper-datatable-api-column
+              header="Group ID"
+              property="group_id"
+              draggable-column
+              sortable>
+            <template>
+              <span>{{value}}</span>
+            </template>
+          </paper-datatable-api-column>
+          <paper-datatable-api-column
+              header="Group Name"
+              property="groupName"
+              draggable-column
+              sortable
+              filter>
+            <template>
+              <span>{{value}}</span>
+            </template>
+          </paper-datatable-api-column>
+          <paper-datatable-api-column
+              header="Group Level"
+              property="groupLevel"
+              draggable-column
+              sortable
+              filter>
+            <template>
+              <span>{{value}}</span>
+            </template>
+          </paper-datatable-api-column>
+          <paper-datatable-api-column
+              header="Teacher ID"
+              property="teacher_id"
+              draggable-column
+              sortable
+              filter>
+            <template>
+              <span>{{value}}</span>
+            </template>
+          </paper-datatable-api-column>
+        </paper-datatable-api>
+      </div>
+    </paper-card>
+  </template>
+
+  <paper-card id="paperCardEvent" heading="Events">
+    <div class="card-content"></div>
+  </paper-card>
+
+  <script>
+    /* eslint-disable linebreak-style,space-before-function-paren,max-len,comma-dangle,semi,linebreak-style,linebreak-style,no-trailing-spaces */
+
+    class GroupList extends Polymer.Element {
+      static get is() {
+        return 'group-list';
+      }
+
+      static get properties() {
+        return {
+          sortProperty: {
+            type: String
+          },
+          filterProperty: {
+            type: String
+          }
+        }
+      }
+
+      _handleSort(event) {
+        this.sortProperty = event.detail.sort.property + ',' + event.detail.sort.direction;
+      }
+
+      _handleFilter(event) {
+        let filter = event.detail.filter.value;
+        let column = event.detail.filter.property;
+        this.filterProperty = filter + ',' + column;
+      }
+    }
+
+    window.customElements.define(GroupList.is, GroupList);
+  </script>
+</dom-module>

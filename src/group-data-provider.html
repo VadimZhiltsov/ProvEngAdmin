@@ -2,14 +2,14 @@
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/iron-meta/iron-meta.html">
 
-<dom-module id="user-data-provider">
+<dom-module id="group-data-provider">
 
   <template>
     <iron-ajax
         id="ajax"
         auto
         method="get"
-        url="[[apiEndPoint]]/rest/v1/users"
+        url="[[apiEndPoint]]/rest/mock/groups"
         headers=[[headers]]
         handle-as="json"
         content-type="application/json"
@@ -17,9 +17,9 @@
     </iron-ajax>
   </template>
   <script>
-    class UserDataProvider extends Polymer.Element {
+    class GroupDataProvider extends Polymer.Element {
       static get is() {
-        return 'user-data-provider';
+        return 'group-data-provider';
       }
 
       static get properties() {
@@ -46,10 +46,6 @@
           filterProperty: {
             type: String,
             observer: '_filterPropertyChanged'
-          },
-          selectedProperty: {
-            type: String,
-            observer: '_selectedPropertyChanged'
           },
           page: {
             type: Number,
@@ -81,16 +77,14 @@
         this.totalElements = this._response.length;
         this.totalPages = Math.ceil(this.totalElements / this.size);
         this.data = this._response.slice(0, this.size);
+
+        console.log(this.data);
       }
 
       _getHeaders() {
         let _customHeader = "1506725785849testprovengroot@gmail.com";
         //new Polymer.IronMeta({key: 'localToken'}).value;
         return {token: _customHeader};
-      }
-
-      _selectedPropertyChanged(selected) {
-        this.$.ajax.set('params', {'roleName': selected});
       }
 
       _sortPropertyChanged(string) {
@@ -120,6 +114,7 @@
       _filterPropertyChanged(string) {
         let filters = [];
         let result = [];
+
         filters = string.split(/,/);
         let filter = filters[0].toLowerCase();
         let column = filters[1];
@@ -153,6 +148,6 @@
       }
     }
 
-    window.customElements.define(UserDataProvider.is, UserDataProvider);
+    window.customElements.define(GroupDataProvider.is, GroupDataProvider);
   </script>
 </dom-module>
