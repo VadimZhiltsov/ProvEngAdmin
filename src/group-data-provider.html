@@ -9,7 +9,7 @@
         id="ajax"
         auto
         method="get"
-        url="[[apiEndPoint]]/rest/mock/groups"
+        url="[[apiEndPoint]]/rest/v1/groups"
         headers=[[headers]]
         handle-as="json"
         content-type="application/json"
@@ -56,7 +56,7 @@
           size: {
             type: Number,
             notify: true,
-            value: 10,
+            value: 5,
             observer: '_handleSizeChanged'
           },
           totalElements: {
@@ -83,7 +83,7 @@
 
       _getHeaders() {
         let _customHeader = "1506725785849testprovengroot@gmail.com";
-        //new Polymer.IronMeta({key: 'localToken'}).value;
+          //new Polymer.IronMeta({key: 'localToken'}).value;
         return {token: _customHeader};
       }
 
