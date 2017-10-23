@@ -77,8 +77,6 @@
         this.totalElements = this._response.length;
         this.totalPages = Math.ceil(this.totalElements / this.size);
         this.data = this._response.slice(0, this.size);
-
-        console.log(this.data);
       }
 
       _getHeaders() {

@@ -12,6 +12,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-datatable-api/paper-datatable-api-column.html">
 <link rel="import" href="../bower_components/paper-datatable-api/paper-datatable-api.html">
 <link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="shared-styles.html">
 
 <link rel="import" href="group-data-provider.html">
@@ -35,6 +40,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       paper-card {
         width: 100%;
       }
+
+      .collapse-area {
+        margin:0 16px;
+      }
+
+      paper-button {
+        margin: 0;
+      }
+
+      paper-button > iron-icon {
+        margin-right: 15px;
+      }
+
+      paper-button > paper-spinner {
+        margin-right: 15px;
+      }
+
+      iron-collapse {
+        margin-top: 1px;
+      }
+
+      iron-collapse > paper-card {
+        padding: 15px;
+      }
+
     </style>
 
     <group-data-provider
@@ -49,6 +79,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </group-data-provider>
 
     <paper-card heading="Group list">
+
+      <div class="collapse-area">
+        <paper-button raised on-click="_toggle">
+          <iron-icon icon="av:playlist-add"></iron-icon>Add group
+        </paper-button>
+        <iron-collapse id="collapse">
+          <paper-card>
+            <p></p>
+            <iron-form id="addGroupForm">
+              <form action="[[apiEndPoint]]/rest/v1/group" method="post">
+                <paper-input type="text" name="groupName" required auto-validate label="Group Name"></paper-input>
+                <paper-input type="text" name="groupLevel" required auto-validate label="Group Level"></paper-input>
+                <br><br>
+                <paper-button id="formSubmit" disabled raised on-click="_submit">
+                  <paper-spinner active="[[_activeSubmitSpinner]]" hidden="[[_hiddenSubmitSpinner]]"></paper-spinner>Submit
+                </paper-button>
+                <paper-button id="formReset" raised on-click="_reset">
+                  <paper-spinner active="[[_activeResetSpinner]]" hidden="[[_hiddenResetSpinner]]"></paper-spinner>Reset
+                </paper-button>
+              </form>
+            </iron-form>
+          </paper-card>
+        </iron-collapse>
+      </div>
+
       <div class="card-content">
         <paper-datatable-api
             paginate
@@ -92,7 +147,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               sortable
               filter>
             <template>
-              <span>{{value}}</span>
+              <paper-input value="{{value}}"></paper-input>
             </template>
           </paper-datatable-api-column>
           <paper-datatable-api-column
@@ -122,8 +177,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return 'group-list';
       }
 
+      constructor() {
+        super();
+        this._submitted = false;
+        this._presubmitted = false;
+        this._hiddenSubmitSpinner = true;
+        this._activeSubmitSpinner = false;
+        this._hiddenResetSpinner = true;
+        this._activeResetSpinner = false;
+      }
+
+      ready() {
+        super.ready();
+
+        this.$.addGroupForm.addEventListener('iron-form-submit', function (event) {
+          let formSubmit = this.shadowRoot.getElementById('formSubmit');
+          this._hiddenSubmitSpinner = true;
+          this._activeSubmitSpinner = false;
+          formSubmit.disabled = false;
+          this._submitted = true;
+        }.bind(this));
+
+        this.$.addGroupForm.addEventListener('iron-form-presubmit', function () {
+          this._presubmitted = true;
+        }.bind(this));
+
+        this.$.addGroupForm.addEventListener('change', function () {
+          let formSubmit = this.shadowRoot.getElementById('formSubmit');
+          let addGroupForm = this.shadowRoot.getElementById('addGroupForm');
+          formSubmit.disabled = !addGroupForm.validate();
+        }.bind(this));
+      }
+
       static get properties() {
         return {
+          apiEndPoint: {
+            type: String,
+            value: 'http://proveng.cloud.provectus-it.com'
+          },
           sortProperty: {
             type: String
           },
@@ -141,6 +232,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         let filter = event.detail.filter.value;
         let column = event.detail.filter.property;
         this.filterProperty = filter + ',' + column;
+      }
+
+      _toggle() {
+        this.$.collapse.toggle();
+      }
+
+      _submit() {
+        let form = this.$.addGroupForm;
+        this._activeSubmitSpinner = true;
+        this._hiddenSubmitSpinner = false;
+        this.$.formSubmit.disabled = true;
+
+        setTimeout(function () {
+          form.submit();
+        }, 500);
+      }
+
+      _reset() {
+        this._activeResetSpinner = true;
+        this._hiddenResetSpinner = false;
+        this.$.formSubmit.disabled = true;
+        setTimeout(function () {
+          this._activeResetSpinner = false;
+          this._hiddenResetSpinner = true;
+        }, 500);
+        this.$.addGroupForm.reset();
       }
     }
 
