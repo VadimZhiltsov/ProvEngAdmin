@@ -20,6 +20,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="shared-styles.html">
 
 <link rel="import" href="group-data-provider.html">
+<link rel="import" href="edit-wrapper.html">
 
 <dom-module id="group-list">
   <template>
@@ -143,11 +144,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <paper-datatable-api-column
               header="Group Level"
               property="level"
+              other-properties='["id"]'
               draggable-column
               sortable
               filter>
             <template>
-              <paper-input value="{{value}}"></paper-input>
+              <edit-wrapper content-id="[[otherValues.id]]" value="{{value}}" on-edit-value="_handleEditValue"></edit-wrapper>
             </template>
           </paper-datatable-api-column>
           <paper-datatable-api-column
@@ -198,7 +200,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this._submitted = true;
         }.bind(this));
 
-        this.$.addGroupForm.addEventListener('iron-form-presubmit', function () {
+        this.$.addGroupForm.addEventListener('iron-form-presubmit', function (event) {
+          var headers = {'token': '1506725785849testprovengroot@gmail.com'};
+          event.target.request.headers = headers;
           this._presubmitted = true;
         }.bind(this));
 
@@ -220,6 +224,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           },
           filterProperty: {
             type: String
+          },
+          selectedRows: {
+            type: Array
+          },
+          selectedData: {
+            type: Array,
+            value: []
           }
         }
       }
@@ -232,6 +243,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         let filter = event.detail.filter.value;
         let column = event.detail.filter.property;
         this.filterProperty = filter + ',' + column;
+      }
+
+      _handleEditValue(event) {
+
+      }
+
+      _handleSelectionChanged(event) {
+        if(event.detail.selected) {
+          this.selectedData.push(event.detail.data);
+        } else {
+          let index = this.selectedData.indexOf(event.detail.data);
+          this.selectedData.splice(index, 1);
+        }
       }
 
       _toggle() {

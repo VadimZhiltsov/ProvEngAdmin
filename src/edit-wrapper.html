@@ -1,0 +1,62 @@
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+
+<dom-module id="edit-wrapper">
+  <template>
+    <style include="iron-flex iron-flex-alignment"></style>
+
+    <div class="layout horizontal center">
+      <template is="dom-if" if="[[_edit]]">
+        <paper-input class="flex" no-label-float value="{{_tmpValue}}"></paper-input>
+        <paper-icon-button icon="check" value="[[value]]" on-tap="_validEdit"></paper-icon-button>
+      </template>
+      <template is="dom-if" if="[[!_edit]]">
+        <div class="flex">
+          [[value]]
+        </div>
+        <paper-icon-button icon="create" on-tap="_activeEdit"></paper-icon-button>
+      </template>
+    </div>
+  </template>
+
+  <script>
+    class EditWrapper extends Polymer.Element {
+      static get is() {
+        return 'edit-wrapper';
+      }
+
+      static get properties() {
+        return {
+          value: {
+            type: String
+          },
+          contentId: {
+            type: String
+          },
+          _edit: {
+            type: Boolean,
+            value: false
+          },
+          _tmpValue: String
+        }
+      }
+
+      _activeEdit() {
+        this._tmpValue = this.value;
+        this._edit = true;
+      }
+
+      _validEdit() {
+        if(this._tmpValue !== this.value) {
+          this.value = this._tmpValue;
+          this.fire('edit-value', {value: this.value, id: this.contentId});
+        }
+        this._edit = false;
+      }
+    }
+
+    window.customElements.define(EditWrapper.is, EditWrapper);
+  </script>
+</dom-module>
